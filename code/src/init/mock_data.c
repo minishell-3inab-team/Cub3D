@@ -1,33 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_files.c                                      :+:      :+:    :+:   */
+/*   mock_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aabusnin <aabusnin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/22 16:05:26 by aabusnin          #+#    #+#             */
-/*   Updated: 2026/04/25 21:18:56 by aabusnin         ###   ########.fr       */
+/*   Created: 2026/04/22 17:22:44 by aabusnin          #+#    #+#             */
+/*   Updated: 2026/04/25 21:18:19 by aabusnin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/cub3d.h"
 
-int parse_file(t_game *game, char *av)
+
+#include <stdlib.h>
+
+void	mock_init_data(t_game *game)
 {
-    if (!parse_map(game, av))
-    {
-        printf("Failed to parse map\n");    
-        return (0);
-    }
-    if (!validate_map(game))
-    {
-        printf("Failed to validate map\n");
-        return (0);
-    }
-    if (!val_texture(game))
-    {
-        printf("Failed to validate textures\n");
-        return (0);
-    }
-    return (1);
+	(void)game;
 }
