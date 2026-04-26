@@ -6,7 +6,7 @@
 /*   By: aabusnin <aabusnin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:08:24 by aabusnin          #+#    #+#             */
-/*   Updated: 2026/04/25 21:18:19 by aabusnin         ###   ########.fr       */
+/*   Updated: 2026/04/26 13:28:26 by aabusnin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	destroy_tex(t_game *game, t_tex *tex)
 
 void	error_exit(char *msg)
 {
-	ft_putstr_fd("Error\n", 2);
+	ft_putstr_fd("Error: ", 2);
 	ft_putstr_fd(msg, 2);
 	ft_putstr_fd("\n", 2);
 	exit(1);

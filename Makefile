@@ -7,6 +7,8 @@ MLX     = $(MLX_DIR)/libmlx_Linux.a
 LIBFT   = code/libft/libft.a
 LIBS    = -L$(MLX_DIR) -lmlx_Linux -lXext -lX11 -lm
 
+OBJS_DIR = code/objs
+
 SRCS    = code/src/main.c \
           code/src/init/init.c \
           code/src/parsing/parse_files.c \
@@ -14,6 +16,7 @@ SRCS    = code/src/main.c \
           code/src/parsing/parse_textures.c \
           code/src/parsing/validate_map.c \
           code/src/parsing/val_utils.c \
+		  code/src/parsing/parse_color.c \
           code/src/engine/raycaster.c \
           code/src/engine/render.c \
           code/src/engine/textures.c \
@@ -21,7 +24,7 @@ SRCS    = code/src/main.c \
           code/src/player/hooks.c \
           code/src/cleanup/cleanup.c
 
-OBJS    = $(SRCS:.c=.o)
+OBJS    = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 
 all: $(MLX) $(LIBFT) $(NAME)
 
@@ -36,18 +39,19 @@ $(MLX):
 $(LIBFT):
 	make -C code/libft
 
-%.o: %.c
-	$(CC) $(CFLAGS) -I code/includes -I $(MLX_DIR) -c $< -o $@
+$(OBJS_DIR)/%.o: %.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -Iincludes -I$(MLX_DIR) -Icode/libft/includes -c $< -o $@
 
 clean:
+	rm -rf $(OBJS_DIR)
 	make -C code/libft clean
-	make -C $(MLX_DIR) clean
-	rm -f $(OBJS)
+
 
 fclean: clean
+	rm -f $(NAME)
 	make -C code/libft fclean
 	rm -rf $(MLX_DIR)
-	rm -f $(NAME)
 
 re: fclean all
 

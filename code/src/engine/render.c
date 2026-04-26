@@ -6,7 +6,7 @@
 /*   By: aabusnin <aabusnin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:07:15 by aabusnin          #+#    #+#             */
-/*   Updated: 2026/04/25 17:50:03 by aabusnin         ###   ########.fr       */
+/*   Updated: 2026/04/26 16:16:47 by aabusnin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,9 @@ void draw_vertical_line(t_game *game, int x, int draw_start, int draw_end, int c
 
 int render_frame(t_game *game)
 {
+    update_movement(game);
     render_background(game);
-    
     raycaster(game);
-
     mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
     return (0);
 }

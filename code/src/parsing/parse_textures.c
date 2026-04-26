@@ -6,7 +6,7 @@
 /*   By: aabusnin <aabusnin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:06:31 by aabusnin          #+#    #+#             */
-/*   Updated: 2026/04/25 21:18:19 by aabusnin         ###   ########.fr       */
+/*   Updated: 2026/04/26 17:52:14 by aabusnin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,14 @@ int val_texture(t_game *game)
 
 int load_texture(t_game *game, t_tex *tex, char *path)
 {
+    printf("Debug Path: [%s]\n", path); 
+    
     tex->img = mlx_xpm_file_to_image(game->mlx, path, &tex->width, &tex->height);
     if (!tex->img)
+    {
+        printf("Failed to load image from this exact path!\n");
         return (0);
+    }
     tex->addr = mlx_get_data_addr(tex->img, &tex->bpp, &tex->line_len, &tex->endian);
     return (tex->addr != NULL);
 }

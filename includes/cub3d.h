@@ -6,15 +6,27 @@
 /*   By: aabusnin <aabusnin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 15:57:08 by aabusnin          #+#    #+#             */
-/*   Updated: 2026/04/25 21:38:20 by aabusnin         ###   ########.fr       */
+/*   Updated: 2026/04/26 17:27:19 by aabusnin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-#define WIN_WIDTH 800
-#define WIN_HEIGHT 600
+#define WIN_WIDTH 1200
+#define WIN_HEIGHT 800
+
+
+#define KEY_ESC     65307
+#define KEY_W       119
+#define KEY_A       97
+#define KEY_S       115
+#define KEY_D       100
+#define KEY_LEFT    65361
+#define KEY_RIGHT   65363
+
+#define MOVE_SPEED  0.05
+#define ROT_SPEED   0.03
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -25,7 +37,6 @@
 #include "../code/libft/libft.h"
 #include "../code/mlx_linux/mlx.h"
 
-/* structs.h — shared between A and B, frozen after day 1 */
 
 typedef struct s_map {
     char    **grid;
@@ -59,6 +70,15 @@ typedef struct s_textures {
     t_tex   west;
 }   t_textures;
 
+typedef struct s_keys {
+    int w;
+    int a;
+    int s;
+    int d;
+    int left;
+    int right;
+}   t_keys;
+
 typedef struct s_ray {
     double  cam_x;
     double  dir_x;
@@ -91,6 +111,7 @@ typedef struct s_game {
     t_map       map;
     t_player    player;
     t_textures  tex;
+    t_keys      keys;
     int         floor_color;
     int         ceil_color;
     char        *no_path;
@@ -111,6 +132,7 @@ int		validate_map(t_game *game);
 void	flood_fill(char **grid, int cols, int rows, int x, int y);
 int		player_position(t_game *game, int *x, int *y);
 int		check_flood(char **grid, int rows, int cols);
+int     parse_color(char *line);
 
 
 /***********************************/
@@ -122,25 +144,29 @@ int		render_frame(t_game *game);
 void	init_game(t_game *game);
 
 
-/************ engine/raycaster.c ************/
+/***********************************/
+/*************ENGINE***************/
+/***********************************/
 void	raycaster(t_game *game);
 void	draw_vertical_line(t_game *game, int x, int draw_start, int draw_end,
 			int color);
-
-/************ engine/render.c ************/
 void	ft_pixel_put(t_game *game, int x, int y, int color);
-
-/************ engine/textures.c ************/
 int		get_tex_color(t_tex *tex, int x, int y);
 
-/************ hooks/hooks.c ************/
-int		setup_hooks(t_game *game);
-int		key_press(int keycode, t_game *game);
-int		close_window(t_game *game);
+/***********************************/
+/*************PLAYER***************/
+/***********************************/
+void		setup_hooks(t_game *game);
+int		    key_press(int keycode, t_game *game);
+int		    close_window(t_game *game);
 
-
-
-
+/***********************************/
+/*************MOVEMENT***************/
+/***********************************/
+void	    move_forward_back(t_game *g, double direction);
+void	    move_left_right(t_game *g, double direction);
+void	    rotate_player(t_game *g, double rot_dir);
+void	    update_movement(t_game *g);
 
 
 #endif
