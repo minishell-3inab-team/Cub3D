@@ -1,0 +1,63 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   val_utils2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jehad <jehad@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/23 04:49:35 by jehad             #+#    #+#             */
+/*   Updated: 2026/05/16 12:08:09 by jehad            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../../includes/cub3d.h"
+
+char	**dup_grid(t_game *game)
+{
+	char	**cpy;
+	int		i;
+
+	cpy = malloc(sizeof(char *) * (game->map.rows + 1));
+	if (!cpy)
+		return (NULL);
+	i = 0;
+	while (i < game->map.rows)
+	{
+		cpy[i] = ft_strdup(game->map.grid[i]);
+		if (!cpy[i])
+			return (free_grid(cpy, i), NULL);
+		i++;
+	}
+	cpy[i] = NULL;
+	return (cpy);
+}
+
+int	has_xpm_ext(char *path)
+{
+	int	len;
+	int	ret;
+
+	ret = 0;
+	if (!path)
+		return (0);
+	len = ft_strlen(path);
+	if (len < 4)
+		return (0);
+	ret = ft_strcmp(path + len - 4, ".xpm") == 0;
+	return (ret);
+}
+
+int	process_id(t_game *g, char *line, int *count)
+{
+	int	ret;
+
+	ret = process_texture(g, line, count);
+	if (ret)
+		return (ret);
+	ret = process_color(g, line, count);
+	if (ret)
+		return (ret);
+	if (ft_strchr(line, ' ') && ft_isalpha(line[0]))
+		return (-1);
+	return (0);
+}

@@ -12,60 +12,47 @@
 
 #include "../../../includes/cub3d.h"
 
-
-void    ft_pixel_put(t_game *game, int x, int y, int color)
+void	ft_pixel_put(t_game *game, int x, int y, int color)
 {
-    char    *dst;
-    int     offset;
-    
-    if (x < 0 || x >= WIN_WIDTH || y < 0 || y >= WIN_HEIGHT)
-        return ;
-    offset = (y * game->line_len) + (x * (game->bpp / 8));
-    dst = game->img_addr + offset;
-    *(unsigned int*)dst = color;
+	char	*dst;
+	int		offset;
+
+	if (x < 0 || x >= WIN_WIDTH || y < 0 || y >= WIN_HEIGHT)
+		return ;
+	offset = (y * game->line_len) + (x * (game->bpp / 8));
+	dst = game->img_addr + offset;
+	*(unsigned int *)dst = color;
 }
 
-static  void    render_background(t_game *game)
+static void	render_background(t_game *game)
 {
-    int     x;
-    int     y;
+	int	x;
+	int	y;
 
-    y = 0;
-    while (y < WIN_HEIGHT)
-    {
-        x = 0;
-        while (x < WIN_WIDTH)
-        {
-            if(y < WIN_HEIGHT / 2)
-                ft_pixel_put(game, x, y, game->ceil_color);
-            else
-                ft_pixel_put(game, x, y, game->floor_color);
-            x++;
-        }
-        y++;
-    }
-    
+	y = 0;
+	while (y < WIN_HEIGHT)
+	{
+		x = 0;
+		while (x < WIN_WIDTH)
+		{
+			if (y < WIN_HEIGHT / 2)
+				ft_pixel_put(game, x, y, game->ceil_color);
+			else
+				ft_pixel_put(game, x, y, game->floor_color);
+			x++;
+		}
+		y++;
+	}
 }
 
-
-void draw_vertical_line(t_game *game, int x, int draw_start, int draw_end, int color)
+int	render_frame(void *param)
 {
-    int y;
+	t_game	*game;
 
-    y = draw_start;
-    while (y <= draw_end)
-    {
-        ft_pixel_put(game, x, y, color);
-        y++;
-    }
+	game = (t_game *)param;
+	update_movement(game);
+	render_background(game);
+	raycaster(game);
+	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
+	return (0);
 }
-
-int render_frame(t_game *game)
-{
-    update_movement(game);
-    render_background(game);
-    raycaster(game);
-    mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
-    return (0);
-}
-

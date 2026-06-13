@@ -1,6 +1,6 @@
 NAME    = cub3D
 CC      = cc
-CFLAGS  = -Wall -Wextra -Werror
+CFLAGS  = -Wall -Wextra -Werror -Wno-incompatible-pointer-types
 MLX_DIR = code/mlx_linux
 MLX_URL = https://github.com/42Paris/minilibx-linux.git
 MLX     = $(MLX_DIR)/libmlx_Linux.a
@@ -11,18 +11,21 @@ OBJS_DIR = code/objs
 
 SRCS    = code/src/main.c \
           code/src/init/init.c \
-          code/src/parsing/parse_files.c \
           code/src/parsing/parse_map.c \
-          code/src/parsing/parse_textures.c \
           code/src/parsing/validate_map.c \
           code/src/parsing/val_utils.c \
-		  code/src/parsing/parse_color.c \
+          code/src/parsing/val_utils2.c \
+          code/src/parsing/parse_color.c \
+          code/src/parsing/parse_map_utils.c \
+          code/src/parsing/parse_map_helpers.c \
           code/src/engine/raycaster.c \
+          code/src/engine/raycaster2.c \
           code/src/engine/render.c \
           code/src/engine/textures.c \
           code/src/player/movement.c \
           code/src/player/hooks.c \
-          code/src/cleanup/cleanup.c
+          code/src/cleanup/cleanup.c \
+          code/src/parsing/free_utils.c
 
 OBJS    = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 
@@ -47,7 +50,6 @@ clean:
 	rm -rf $(OBJS_DIR)
 	make -C code/libft clean
 
-
 fclean: clean
 	rm -f $(NAME)
 	make -C code/libft fclean
@@ -55,4 +57,6 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+bonus: all
+
+.PHONY: all clean fclean re bonus

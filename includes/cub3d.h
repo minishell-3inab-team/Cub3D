@@ -3,170 +3,194 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aabusnin <aabusnin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jalju-be <jalju-be@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 15:57:08 by aabusnin          #+#    #+#             */
-/*   Updated: 2026/04/26 17:27:19 by aabusnin         ###   ########.fr       */
+/*   Updated: 2026/05/13 20:28:06 by jalju-be         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-#define WIN_WIDTH 1200
-#define WIN_HEIGHT 800
+# include "../code/libft/libft.h"
+# include "../code/mlx_linux/mlx.h"
+# include <fcntl.h>
+# include <math.h>
+# include <stdlib.h>
+# include <unistd.h>
 
+# define WIN_WIDTH 1200
+# define WIN_HEIGHT 800
 
-#define KEY_ESC     65307
-#define KEY_W       119
-#define KEY_A       97
-#define KEY_S       115
-#define KEY_D       100
-#define KEY_LEFT    65361
-#define KEY_RIGHT   65363
+# define KEY_ESC 65307
+# define KEY_W 119
+# define KEY_A 97
+# define KEY_S 115
+# define KEY_D 100
+# define KEY_LEFT 65361
+# define KEY_RIGHT 65363
 
-#define MOVE_SPEED  0.05
-#define ROT_SPEED   0.03
+# define MOVE_SPEED 0.05
+# define ROT_SPEED 0.03
 
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <math.h>
-#include <stdio.h>
-#include <errno.h>
-#include "../code/libft/libft.h"
-#include "../code/mlx_linux/mlx.h"
+typedef struct s_map
+{
+	char		**grid;
+	int			rows;
+	int			cols;
+}				t_map;
 
+typedef struct s_player
+{
+	double		x;
+	double		y;
+	double		dir_x;
+	double		dir_y;
+	double		plane_x;
+	double		plane_y;
+}				t_player;
 
-typedef struct s_map {
-    char    **grid;
-    int     rows;
-    int     cols;
-}   t_map;
+typedef struct s_tex
+{
+	void		*img;
+	char		*addr;
+	int			width;
+	int			height;
+	int			bpp;
+	int			line_len;
+	int			endian;
+}				t_tex;
 
-typedef struct s_player {
-    double  x;
-    double  y;
-    double  dir_x;
-    double  dir_y;
-    double  plane_x;
-    double  plane_y;
-}   t_player;
+typedef struct s_textures
+{
+	t_tex		north;
+	t_tex		south;
+	t_tex		east;
+	t_tex		west;
+}				t_textures;
 
-typedef struct s_tex {
-    void    *img;
-    char    *addr;
-    int     width;
-    int     height;
-    int     bpp;
-    int     line_len;
-    int     endian;
-}   t_tex;
+typedef struct s_keys
+{
+	int			w;
+	int			a;
+	int			s;
+	int			d;
+	int			left;
+	int			right;
+}				t_keys;
 
-typedef struct s_textures {
-    t_tex   north;
-    t_tex   south;
-    t_tex   east;
-    t_tex   west;
-}   t_textures;
+typedef struct s_ray
+{
+	double		cam_x;
+	double		dir_x;
+	double		dir_y;
+	int			map_x;
+	int			map_y;
+	double		side_dist_x;
+	double		side_dist_y;
+	double		delta_dist_x;
+	double		delta_dist_y;
+	double		perp_wall_dist;
+	int			step_x;
+	int			step_y;
+	int			hit;
+	int			side;
+	int			line_height;
+	int			draw_start;
+	int			draw_end;
+	int			tex_x;
+}				t_ray;
 
-typedef struct s_keys {
-    int w;
-    int a;
-    int s;
-    int d;
-    int left;
-    int right;
-}   t_keys;
-
-typedef struct s_ray {
-    double  cam_x;
-    double  dir_x;
-    double  dir_y;
-    int     map_x;
-    int     map_y;
-    double  side_dist_x;
-    double  side_dist_y;
-    double  delta_dist_x;
-    double  delta_dist_y;
-    double  perp_wall_dist;
-    int     step_x;
-    int     step_y;
-    int     hit;
-    int     side;
-    int     line_height;
-    int     draw_start;
-    int     draw_end;
-    int     tex_x;
-}   t_ray;
-
-typedef struct s_game {
-    void        *mlx;
-    void        *win;
-    void        *img;
-    char        *img_addr;
-    int         bpp;
-    int         line_len;
-    int         endian;
-    t_map       map;
-    t_player    player;
-    t_textures  tex;
-    t_keys      keys;
-    int         floor_color;
-    int         ceil_color;
-    char        *no_path;
-    char        *so_path;
-    char        *ea_path;
-    char        *we_path;
-}   t_game;
-
-/***********************************/
-/*************PARSING***************/ 
-/***********************************/
-int		parse_file(t_game *game, char *av);
-int		parse_map(t_game *game, char *av);
-int		load_texture(t_game *game, t_tex *tex, char *path);
-int		load_all_tex(t_game *game);
-int		val_texture(t_game *game);
-int		validate_map(t_game *game);
-void	flood_fill(char **grid, int cols, int rows, int x, int y);
-int		player_position(t_game *game, int *x, int *y);
-int		check_flood(char **grid, int rows, int cols);
-int     parse_color(char *line);
-
+typedef struct s_game
+{
+	void		*mlx;
+	void		*win;
+	void		*img;
+	char		*img_addr;
+	int			bpp;
+	int			line_len;
+	int			endian;
+	t_map		map;
+	t_player	player;
+	t_textures	tex;
+	t_keys		keys;
+	int			floor_color;
+	int			ceil_color;
+	char		*no_path;
+	char		*so_path;
+	char		*ea_path;
+	char		*we_path;
+}				t_game;
 
 /***********************************/
-/*************CLEANUP***************/ 
+/*************PARSING***************/
 /***********************************/
-void	error_exit(char *msg);
-void	cleanup(t_game *game);
-int		render_frame(t_game *game);
-void	init_game(t_game *game);
+int				parse_file(t_game *game, char *av);
+int				parse_map(t_game *game, char *av);
+int				is_empty(char *s);
+int				has_cub_extension(char *filename);
+int				is_identifier_line(char *s);
+int				is_map_line(char *s);
+void			set_player_dir_vector(t_game *g, char c);
+int				validate_map(t_game *game);
 
+int				parse_color(char *line);
+int				process_texture(t_game *g, char *line, int *count);
+int				process_color(t_game *g, char *line, int *count);
+int				store_map_row(t_game *g, char *line, int *i);
+int				process_map_line(t_game *g,
+					char *line, int *i, int *map_started);
+int				process_id(t_game *g, char *line, int *count);
+void			set_player_plane(t_game *g, char c);
+void			set_player_dir(t_game *g, char c);
+int				free_split_return(char **arr);
+int				increaser(int *count);
+int				close_free_map(t_game *g, int fd, int flag);
+int				free_fire(char *line);
+void			free_split(char **arr);
+int				ensure_capacity(t_game *g, int *capacity, int i);
+
+/***********************************/
+/*************VALIDATION UTILS*****/
+/***********************************/
+void			free_grid(char **grid, int rows);
+char			**dup_grid(t_game *game);
+int				has_xpm_ext(char *path);
+
+/***********************************/
+/*************CLEANUP***************/
+/***********************************/
+void			error_exit(t_game *game, char *msg);
+void			cleanup(t_game *game);
+int				render_frame(void *param);
+void			init_game(t_game *game);
 
 /***********************************/
 /*************ENGINE***************/
 /***********************************/
-void	raycaster(t_game *game);
-void	draw_vertical_line(t_game *game, int x, int draw_start, int draw_end,
-			int color);
-void	ft_pixel_put(t_game *game, int x, int y, int color);
-int		get_tex_color(t_tex *tex, int x, int y);
-
+void			init_ray(t_game *game, t_ray *ray, int x);
+void			calc_step(t_game *game, t_ray *ray);
+void			dda(t_game *game, t_ray *ray);
+t_tex			*get_wall_texture(t_game *game, t_ray *ray);
+void			raycaster(t_game *game);
+void			ft_pixel_put(t_game *game, int x, int y, int color);
+int				get_tex_color(t_tex *tex, int x, int y);
+void			load_single_texture(t_game *game, t_tex *tex, char *path);
+void			load_textures(t_game *game);
 /***********************************/
 /*************PLAYER***************/
 /***********************************/
-void		setup_hooks(t_game *game);
-int		    key_press(int keycode, t_game *game);
-int		    close_window(t_game *game);
+void			setup_hooks(t_game *game);
+int				key_press(int keycode, t_game *game);
+int				close_window(t_game *game);
 
 /***********************************/
 /*************MOVEMENT***************/
 /***********************************/
-void	    move_forward_back(t_game *g, double direction);
-void	    move_left_right(t_game *g, double direction);
-void	    rotate_player(t_game *g, double rot_dir);
-void	    update_movement(t_game *g);
-
+void			move_forward_back(t_game *g, double direction);
+void			move_left_right(t_game *g, double direction);
+void			rotate_player(t_game *g, double rot_dir);
+void			update_movement(t_game *g);
 
 #endif

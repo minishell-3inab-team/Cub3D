@@ -1,25 +1,11 @@
-EA ./code/textures/bookshelf_03.xpm
-
-F 255,0,0
-C 171,154,137
-
-NO ./code/textures/bookshelf.xpm
-SO ./code/textures/bookshelf_00.xpm
+NO ./code/textures/bookshelf_00.xpm
+SO ./code/textures/bookshelf_01.xpm
 WE ./code/textures/bookshelf_02.xpm
+EA ./code/textures/bookshelf_03.xpm
+F 50,100,0
+C 225,30,0
 
-       1111111111 11111111111
-11111111001001001111
-1001001001001001001
-10010010010N1001001
-1001001000001001001
-1000000000000000001
-1000011111111000001
-1111000000000001111
-1000000101010000001
-1111111111111111111
-
-
-
-
-
-                  
+    111111
+111100001
+1N00000001
+1111111111

@@ -3,74 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   val_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aabusnin <aabusnin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jalju-be <jalju-be@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 04:49:35 by jehad             #+#    #+#             */
-/*   Updated: 2026/04/25 21:18:19 by aabusnin         ###   ########.fr       */
+/*   Updated: 2026/05/13 20:56:03 by jalju-be         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/cub3d.h"
 
-void	flood_fill(char **grid, int cols, int rows, int x, int y)
+int	ensure_capacity(t_game *g, int *capacity, int i)
 {
-	char	c;
+	char	**tmp;
 
-	if (x < 0 || x >= cols || y < 0 || y >= rows)
-		return ;
-	if (x >= (int)ft_strlen(grid[y]))
-		return ;
-	c = grid[y][x];
-	if (c == '1' || c == 'F' || c == ' ')
-		return ;
-	grid[y][x] = 'F';
-	flood_fill(grid, cols, rows, x + 1, y);
-	flood_fill(grid, cols, rows, x - 1, y);
-	flood_fill(grid, cols, rows, x, y + 1);
-	flood_fill(grid, cols, rows, x, y - 1);
+	if (i < *capacity - 1)
+		return (1);
+	*capacity *= 2;
+	tmp = realloc(g->map.grid, sizeof(char *) * *capacity);
+	if (!tmp)
+		return (0);
+	g->map.grid = tmp;
+	return (1);
 }
 
-int	player_position(t_game *game, int *x, int *y)
+void	free_grid(char **grid, int rows)
 {
 	int	i;
-	int	j;
 
 	i = 0;
-	while (game->map.grid[i])
+	while (i < rows && grid && grid[i])
 	{
-		j = 0;
-		while (game->map.grid[i][j])
-		{
-			if (ft_strchr("NSEW", game->map.grid[i][j]))
-				return (*x = j, *y = i, 1);
-			j++;
-		}
+		free(grid[i]);
 		i++;
 	}
-	return (0);
-}
-
-int	check_flood(char **grid, int rows, int cols)
-{
-	int		i;
-	int		j;
-	char	c;
-
-	i = 0;
-	while (i < rows)
-	{
-		j = 0;
-		while (j < cols)
-		{
-			if (j >= (int)ft_strlen(grid[i]))
-				c = ' ';
-			else
-				c = grid[i][j];
-			if (ft_strchr("0NSEW", c))
-				return (0);
-			j++;
-		}
-		i++;
-	}
-	return (1);
+	if (grid)
+		free(grid);
 }
